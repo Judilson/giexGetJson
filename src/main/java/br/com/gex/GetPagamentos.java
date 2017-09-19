@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +30,7 @@ public class GetPagamentos extends HttpServlet {
         try {
 
             Connection conn = new ConectaMysql().conecta();
+            PreparedStatement psmt = null;
             
             String query = "SELECT "
                     + "    C.CRED_DS_CREDOR \"Credor\","
@@ -50,9 +51,13 @@ public class GetPagamentos extends HttpServlet {
                     + "    PAPG_VL_PAGO_TOTAL \"Valor do pagamento\""
                     + " FROM"
                     + "    giex.BI_PAGAMENTOS P"
-                    + "    INNER JOIN giex.BI_CREDORES C ON P.CRED_ID_CREDOR = C.CRED_ID_CREDOR";
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+                    + "    INNER JOIN giex.BI_CREDORES C ON P.CRED_ID_CREDOR = C.CRED_ID_CREDOR "
+                    + " WHERE P.CRED_ID_CREDOR=?";
+            
+            psmt = conn.prepareStatement(query);
+            psmt.setInt(1, Integer.parseInt(request.getParameter("idCredor")));
+    
+            ResultSet resultSet = psmt.executeQuery();
 
             InputStream inputStream = Compressor.compressDb(resultSet);
 
