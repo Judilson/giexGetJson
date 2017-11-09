@@ -24,6 +24,17 @@
         <servlet-class>br.com.gex.GetRateios</servlet-class>
     </servlet>
     <!--
+   Analise divida dim01
+   -->
+    <servlet-mapping>
+        <servlet-name>GetAnaliseDividaDim01</servlet-name>
+        <url-pattern>/GetAnaliseDividaDim01</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetAnaliseDividaDim01</servlet-name>
+        <servlet-class>br.com.gex.GetAnaliseDividaDim01</servlet-class>
+    </servlet>
+    <!--
    CORS
    -->
     <filter>
